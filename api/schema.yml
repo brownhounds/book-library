@@ -41,6 +41,37 @@ paths:
         400:
           $ref: "#/components/responses/BadRequest"
 
+  /v1/auth/whoami:
+    get:
+      summary: Retrieve user information
+      description: Get the current user's details including name, email, and avatar.
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successful response with user details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                    example: "Jon Doe"
+                  Email:
+                    type: string
+                    example: "jon.doe@test.com"
+                  Avatar:
+                    type: string
+                    format: uri
+                    example: "https://mighty.tools/mockmind-api/content/human/7.jpg"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -69,6 +100,13 @@ components:
   responses:
     Forbidden:
       description: Access Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:

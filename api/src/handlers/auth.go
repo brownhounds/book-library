@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"go-api-template/src/clients"
 	"go-api-template/src/services/auth_service"
 	"net/http"
 
 	"github.com/brownhounds/swift/res"
+	"github.com/golang-jwt/jwt"
 )
 
 type Credentials struct {
@@ -42,4 +44,26 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	res.Json(w, http.StatusOK, res.Map{
 		"token": token,
 	})
+}
+
+type Whoami struct {
+	Name     string         `db:"name"`
+	Email    string         `db:"email"`
+	Avatar   string         `db:"avatar"`
+}
+
+func WhoamiHandler(w http.ResponseWriter, r *http.Request) {
+	claims := r.Context().Value("userClaims").(jwt.MapClaims)
+	userId := claims["sub"]
+
+	conn := clients.Postgres.Connection()
+	var whoami Whoami
+
+	err := conn.Get(&whoami, "SELECT name, email, avatar FROM get_user_by_id($1)", userId)
+	if err != nil {
+		res.ApiError(w, http.StatusInternalServerError)
+		return
+	}
+
+	res.Json(w, http.StatusOK, whoami)
 }
