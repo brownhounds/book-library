@@ -8,6 +8,8 @@ paths:
   /v1/auth/login:
     post:
       summary: Login endpoint
+      tags:
+        - Authentication
       requestBody:
         required: true
         content:
@@ -44,6 +46,8 @@ paths:
   /v1/auth/whoami:
     get:
       summary: Retrieve user information
+      tags:
+        - Authentication
       description: Get the current user's details including name, email, and avatar.
       security:
         - bearerAuth: []

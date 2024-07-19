@@ -6,6 +6,8 @@ import (
 	"go-api-template/src/services/auth_service"
 	"net/http"
 
+	pg "github.com/lib/pq"
+
 	"github.com/brownhounds/swift/res"
 	"github.com/golang-jwt/jwt"
 )
@@ -50,6 +52,7 @@ type Whoami struct {
 	Name     string         `db:"name"`
 	Email    string         `db:"email"`
 	Avatar   string         `db:"avatar"`
+	Roles    pg.StringArray `db:"roles"`
 }
 
 func WhoamiHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +62,7 @@ func WhoamiHandler(w http.ResponseWriter, r *http.Request) {
 	conn := clients.Postgres.Connection()
 	var whoami Whoami
 
-	err := conn.Get(&whoami, "SELECT name, email, avatar FROM get_user_by_id($1)", userId)
+	err := conn.Get(&whoami, "SELECT name, email, avatar, roles FROM get_user_by_id($1)", userId)
 	if err != nil {
 		res.ApiError(w, http.StatusInternalServerError)
 		return

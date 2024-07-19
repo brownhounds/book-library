@@ -3,6 +3,7 @@ package main
 import (
 	"go-api-template/src/clients"
 	"go-api-template/src/config"
+	"go-api-template/src/middlewares"
 	"go-api-template/src/routes"
 
 	"github.com/brownhounds/swift"
@@ -13,14 +14,16 @@ func main() {
 	env.InitWithMandatoryVariables(config.MandatoryEnvVariables)
 
 	app := swift.New()
+
+	app.AddCorsMiddleware(middlewares.Cors)
+
 	app.OApiValidator("schema.yml")
+	app.SwaggerStaticServer(".swagger", "/docs")
+	app.SwaggerServe(true)
 
 	app.OnBoot(func() {
 		clients.PostgresInit()
 	})
-
-	app.SwaggerStaticServer(".swagger", "/docs")
-	app.SwaggerServe(true)
 
 	routes.AuthRouter(app)
 
