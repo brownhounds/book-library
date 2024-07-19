@@ -23,7 +23,7 @@ BEGIN
     WHERE
         u.id = id_param
     GROUP BY
-        u.id, u.first_name, u.last_name, u.email, u.avatar;
+        u.id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -54,6 +54,6 @@ BEGIN
     WHERE
         u.email = email_param
     GROUP BY
-        u.id, u.first_name, u.last_name, u.email, u.avatar;
+        u.id;
 END;
 $$ LANGUAGE plpgsql;

@@ -3,6 +3,7 @@ package middlewares
 import (
 	"context"
 	"go-api-template/src/config"
+	"go-api-template/src/types"
 	"net/http"
 	"os"
 
@@ -32,14 +33,14 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		next.ServeHTTP(w, r.WithContext(
-			context.WithValue(r.Context(), "userClaims", claims),
+			context.WithValue(r.Context(), types.UserClaims, claims),
 		))
 	})
 }
 
 func IsAdminMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		claims := r.Context().Value("userClaims").(jwt.MapClaims)
+		claims := r.Context().Value(types.UserClaims).(jwt.MapClaims) //nolint
 		if !contains(claims["roles"].([]interface{}), "admin") {
 			res.ApiError(w, http.StatusForbidden)
 			return
@@ -50,10 +51,10 @@ func IsAdminMiddleware(next http.Handler) http.Handler {
 }
 
 func contains(s []interface{}, e string) bool {
-    for _, a := range s {
-        if a == e {
-            return true
-        }
-    }
-    return false
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
