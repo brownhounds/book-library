@@ -12,6 +12,12 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue')
     },
     {
+      path: '/books/:id',
+      name: 'book',
+      beforeEnter: [AuthMiddleware],
+      component: () => import('../views/BookItem.vue')
+    },
+    {
       path: '/login',
       name: 'login',
       beforeEnter: [AuthMiddleware],
@@ -24,12 +30,39 @@ const router = createRouter({
       component: () => import('../views/LogoutView.vue')
     },
     {
-      path: '/about',
-      name: 'about',
-      beforeEnter: [AuthMiddleware, RoleMiddleware('test')],
+      path: '/user/books',
+      name: 'user-books',
+      beforeEnter: [AuthMiddleware],
       component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/admin/requests',
+      name: 'book-requests',
+      beforeEnter: [AuthMiddleware, RoleMiddleware('admin')],
+      component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/admin/readers',
+      name: 'readers',
+      beforeEnter: [AuthMiddleware, RoleMiddleware('admin')],
+      component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/admin/readers/:id',
+      name: 'reader',
+      beforeEnter: [AuthMiddleware, RoleMiddleware('admin')],
+      component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue')
     }
   ]
+})
+
+router.isReady().then(() => {
+  void userSession.fetchUserDetails()
 })
 
 export default router

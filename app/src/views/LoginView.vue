@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { apiClient } from '@/clients/api/client'
+import { authClient } from '@/clients/auth/client'
 import { userSession } from '@/state/UserSession'
 import { computed, reactive, ref } from 'vue'
 
@@ -15,7 +15,7 @@ const buttonEnabled = computed(() => {
 })
 
 const logInUser = async () => {
-  const res = await apiClient.logIn(state)
+  const res = await authClient.logIn(state)
   if (res.status === 400) {
     badRequest.value = true
     return

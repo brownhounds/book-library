@@ -1,17 +1,25 @@
-export type ApiError = {
-  message?: string
-  status?: number
+import type { ApiError } from '../common'
+
+export type BookListItem = {
+  Id: string
+  Title: string
+  Author: string
+  PublicationYear: string
+  Genres: string[]
 }
 
-export type LoginResponse = {
-  token: string
-} & ApiError
+export type BooksResponse = BookListItem[] & ApiError
 
-export type Whoami = {
-  Name: string
-  Email: string
-  Avatar: string
-  Roles: string[]
+export type Book = {
+  Id: string
+  Title: string
+  Author: string
+  PublicationYear: string
+  Description: string
+  CoverImage: string
+  Genres: string
+  UpdatedAt: string
+  CreatedAt: string
 }
 
-export type WhoamiResponse = Whoami & ApiError
+export type BookResponse = Book & ApiError

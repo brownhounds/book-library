@@ -3,3 +3,8 @@ export enum RequestMethod {
   PUT = 'PUT',
   POST = 'POST'
 }
+
+export type ApiError = {
+  message?: string
+  status?: number
+}

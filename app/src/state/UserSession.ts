@@ -1,5 +1,5 @@
-import { apiClient } from '@/clients/api/client'
-import type { Whoami } from '@/clients/api/types'
+import { authClient } from '@/clients/auth/client'
+import type { Whoami } from '@/clients/auth/types'
 import router from '@/router'
 import { reactive } from 'vue'
 
@@ -18,7 +18,7 @@ class UserSession {
 
   public async fetchUserDetails(): Promise<void> {
     if (this.loggedIn && !this.user) {
-      const res = await apiClient.whoami()
+      const res = await authClient.whoami()
 
       if (!res.status) {
         this.user = res
