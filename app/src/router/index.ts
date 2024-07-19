@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { AuthMiddleware, RoleMiddleware } from './middlewares'
+import { userSession } from '@/state/UserSession'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,15 +8,26 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      beforeEnter: [AuthMiddleware],
+      component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/login',
+      name: 'login',
+      beforeEnter: [AuthMiddleware],
+      component: () => import('../views/LoginView.vue')
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      beforeEnter: [async () => await userSession.logOut()],
+      component: () => import('../views/LogoutView.vue')
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      beforeEnter: [AuthMiddleware, RoleMiddleware('test')],
+      component: () => import('../views/HomeView.vue')
     }
   ]
 })
