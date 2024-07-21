@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import UserAvatar from '@/components/UserAvatar.vue'
-import { RouterLink, RouterView } from 'vue-router'
 import { computed } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import UserAvatar from '@/components/UserAvatar.vue'
 import router from './router'
 import { userSession } from './state/UserSession'
 
@@ -31,8 +31,10 @@ const showHeader = computed(
             <li class="nav-item">
               <RouterLink class="nav-link" to="/">Home</RouterLink>
             </li>
-            <li class="nav-item">
-              <RouterLink class="nav-link" to="/user/books">My Books</RouterLink>
+            <li v-if="!userSession.hasRole('admin')" class="nav-item">
+              <RouterLink class="nav-link" :to="`/readers/${userSession.user?.Id}`"
+                >My Books</RouterLink
+              >
             </li>
             <li class="nav-item" v-if="userSession.hasRole('admin')">
               <RouterLink class="nav-link" to="/admin/requests">Requests</RouterLink>
@@ -50,20 +52,19 @@ const showHeader = computed(
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <span
-                  style="margin-right: 15px"
-                  v-if="userSession.hasRole('admin')"
-                  class="badge text-bg-secondary"
+                <span v-if="userSession.hasRole('admin')" class="badge text-bg-secondary me-3"
                   >Admin</span
                 >
-                <UserAvatar style="margin-right: 10px" :user="userSession.user" :size="36" />
+                <UserAvatar class="me-2" :user="userSession.user" :size="36" />
                 {{ userSession.user?.Name }}
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <RouterLink class="dropdown-item" to="/user/books">My Books</RouterLink>
+                <li v-if="!userSession.hasRole('admin')">
+                  <RouterLink class="dropdown-item" :to="`/readers/${userSession.user?.Id}`"
+                    >My Books</RouterLink
+                  >
                 </li>
-                <li><hr class="dropdown-divider" /></li>
+                <li v-if="!userSession.hasRole('admin')"><hr class="dropdown-divider" /></li>
                 <li>
                   <RouterLink class="dropdown-item" to="/logout">Logout</RouterLink>
                 </li>

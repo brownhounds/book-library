@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { onBeforeMount, reactive } from 'vue'
 import { apiClient } from '@/clients/api/client'
 import type { BookListItem } from '@/clients/api/types'
-import { onBeforeMount, reactive } from 'vue'
+import { userSession } from '@/state/UserSession'
+import { requestBooking } from '@/common/booking'
 
 const state = reactive<{ books: BookListItem[] }>({
   books: []
@@ -22,7 +24,7 @@ onBeforeMount(async () => {
           <th scope="col">Author</th>
           <th scope="col">Publication Year</th>
           <th scope="col">Genres</th>
-          <th scope="col">Availability</th>
+          <th v-if="!userSession.hasRole('admin')" scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -41,7 +43,9 @@ onBeforeMount(async () => {
               >{{ genre }}</span
             >
           </td>
-          <td>Unknown</td>
+          <td v-if="!userSession.hasRole('admin')">
+            <button @click="requestBooking(book.Id)" class="btn btn-primary btn-sm">Request</button>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -23,3 +23,40 @@ export type Book = {
 }
 
 export type BookResponse = Book & ApiError
+
+export type RequestResponse = { id: string } & ApiError
+
+export type NullableDate = {
+  Time: string
+  Valid: boolean
+}
+
+export type Booking = {
+  Id: string
+  UserId: string
+  UserName: string
+  BookId: string
+  BookTitle: string
+  Status: string
+  ReturnDate: NullableDate
+  CollectedDate: NullableDate
+  ReturnedDate: NullableDate
+  CreatedAt: string
+  UpdatedAt: string
+}
+
+export type BookingsResponse = Booking[] & ApiError
+
+export type Reader = {
+  Id: string
+  Name: string
+  Email: string
+  Avatar: string
+  CreatedAt: string
+}
+
+export type ReadersResponse = Reader[] & ApiError
+export type ReaderResponse = Reader & ApiError
+
+export type ReaderBook = Booking
+export type ReaderBooksResponse = Booking[] & ApiError

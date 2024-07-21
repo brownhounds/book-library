@@ -5,6 +5,7 @@ export type LoginResponse = {
 } & ApiError
 
 export type Whoami = {
+  Id: string
   Name: string
   Email: string
   Avatar: string

@@ -1,7 +1,8 @@
-export enum RequestMethod {
+export const enum RequestMethod {
   GET = 'GET',
   PUT = 'PUT',
-  POST = 'POST'
+  POST = 'POST',
+  PATCH = 'PATCH'
 }
 
 export type ApiError = {

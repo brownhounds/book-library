@@ -39,19 +39,19 @@ const router = createRouter({
       path: '/admin/requests',
       name: 'book-requests',
       beforeEnter: [AuthMiddleware, RoleMiddleware('admin')],
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/RequestsView.vue')
     },
     {
       path: '/admin/readers',
       name: 'readers',
       beforeEnter: [AuthMiddleware, RoleMiddleware('admin')],
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/ReadersView.vue')
     },
     {
-      path: '/admin/readers/:id',
+      path: '/readers/:id',
       name: 'reader',
-      beforeEnter: [AuthMiddleware, RoleMiddleware('admin')],
-      component: () => import('../views/HomeView.vue')
+      beforeEnter: [AuthMiddleware],
+      component: () => import('../views/ReaderView.vue')
     },
     {
       path: '/:pathMatch(.*)*',

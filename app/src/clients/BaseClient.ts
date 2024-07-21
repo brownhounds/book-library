@@ -23,7 +23,7 @@ export class BaseClient {
     queryParams?: Record<string, string>
   ): Promise<T> {
     // This method should implement graceful error handling
-    // For the sake of the excessive just let it crash
+    // For the sake of the exercise just let it crash
     // App should have built in global mechanism to handle errors gracefully
     const url = this.buildUrl(endpoint, queryParams)
     const response = await fetch(url, options)
@@ -58,6 +58,17 @@ export class BaseClient {
   public async post<T>(endpoint: string, config?: RequestConfig): Promise<T> {
     return this.request<T>(endpoint, {
       method: RequestMethod.POST,
+      headers: {
+        'Content-Type': 'application/json',
+        ...config?.headers
+      },
+      body: config?.body ? JSON.stringify(config.body) : undefined
+    })
+  }
+
+  public async patch<T>(endpoint: string, config?: RequestConfig): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: RequestMethod.PATCH,
       headers: {
         'Content-Type': 'application/json',
         ...config?.headers
