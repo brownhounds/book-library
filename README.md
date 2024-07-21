@@ -1,5 +1,7 @@
 ## Library App
 
+[demo.webm](https://github.com/user-attachments/assets/33f1c32c-265a-419c-aa01-a2ee9aa3ac2a)
+
 The repository consists of two components: `api` and the `frontend` app. More details can be found in the `README.md` of each specific component.
 
 - [Backend](https://github.com/brownhounds/book-library/blob/main/api/README.md)
