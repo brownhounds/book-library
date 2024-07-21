@@ -4,7 +4,7 @@ run:
 
 run-compose:
 	@./scripts/build-docs.sh
-	docker compose up
+	docker compose up --build --force-recreate
 
 build:
 	@GOOS=linux go build -ldflags="-s -w" -o ./bin/api main.go
