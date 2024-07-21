@@ -4,7 +4,7 @@ RETURNS TABLE (
     name TEXT,
     email VARCHAR(255),
     avatar VARCHAR(255),
-    roles VARCHAR(100)[]
+    roles user_role_enum[]
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -34,7 +34,7 @@ RETURNS TABLE (
     name TEXT,
     email VARCHAR(255),
     avatar VARCHAR(255),
-    roles VARCHAR(100)[]
+    roles user_role_enum[]
 ) AS $$
 BEGIN
     RETURN QUERY

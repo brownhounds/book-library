@@ -13,7 +13,7 @@ func GetBooksHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetBookByIdHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
+	id := r.PathValue("bookId")
 	book := books_model.GetBookById(w, id)
 	if book == nil {
 		res.ApiError(w, http.StatusNotFound)

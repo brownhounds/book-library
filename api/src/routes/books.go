@@ -8,7 +8,12 @@ import (
 )
 
 func BooksRouter(app *swift.Swift) {
-	g := app.Group("/v1").Middleware(middlewares.AuthMiddleware)
-	g.Get("/books", handlers.GetBooksHandler)
-	g.Get("/books/{id}", handlers.GetBookByIdHandler)
+	g := app.Group("/v1")
+
+	g.Get("/books", handlers.GetBooksHandler).Middleware(
+		middlewares.AuthMiddleware,
+	)
+	g.Get("/books/{bookId}", handlers.GetBookByIdHandler).Middleware(
+		middlewares.AuthMiddleware,
+	)
 }

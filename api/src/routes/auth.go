@@ -9,7 +9,6 @@ import (
 
 func AuthRouter(app *swift.Swift) {
 	g := app.Group("/v1").Group("/auth")
-
 	g.Post("/login", handlers.LoginHandler)
 	g.Get("/whoami", handlers.WhoamiHandler).Middleware(middlewares.AuthMiddleware)
 }

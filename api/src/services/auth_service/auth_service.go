@@ -57,4 +57,14 @@ func CreateJWT(user *User) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyJWT() {}
+func VerifyJWT(t string, claims *jwt.MapClaims) bool {
+	token, err := jwt.ParseWithClaims(t, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv(config.JWT_SECRET_KEY)), nil
+	})
+
+	if err != nil || !token.Valid {
+		return false
+	}
+
+	return true
+}

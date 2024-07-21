@@ -2,10 +2,9 @@ package middlewares
 
 import (
 	"context"
-	"go-api-template/src/config"
+	"go-api-template/src/services/auth_service"
 	"go-api-template/src/types"
 	"net/http"
-	"os"
 
 	"github.com/brownhounds/swift/res"
 	"github.com/golang-jwt/jwt"
@@ -24,14 +23,11 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		claims := jwt.MapClaims{}
 
-		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte(os.Getenv(config.JWT_SECRET_KEY)), nil
-		})
-
-		if err != nil || !token.Valid {
+		if ok := auth_service.VerifyJWT(tokenString, &claims); !ok {
 			res.ApiError(w, http.StatusUnauthorized)
 			return
 		}
+
 		next.ServeHTTP(w, r.WithContext(
 			context.WithValue(r.Context(), types.UserClaims, claims),
 		))
@@ -40,14 +36,35 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 func IsAdminMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		claims := r.Context().Value(types.UserClaims).(jwt.MapClaims) //nolint
-		if !contains(claims["roles"].([]interface{}), "admin") {
+		if ok := IsUserAdmin(r); !ok {
 			res.ApiError(w, http.StatusForbidden)
 			return
 		}
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func GetUserIdFromContext(r *http.Request) (string, bool) {
+	claims, ok := getClaimsFromContext(r)
+	if !ok {
+		return "", false
+	}
+
+	return claims["sub"].(string), true
+}
+
+func IsUserAdmin(r *http.Request) bool {
+	claims, ok := getClaimsFromContext(r)
+	if !ok {
+		return false
+	}
+
+	if !contains(claims["roles"].([]interface{}), "admin") {
+		return false
+	}
+
+	return true
 }
 
 func contains(s []interface{}, e string) bool {
@@ -57,4 +74,18 @@ func contains(s []interface{}, e string) bool {
 		}
 	}
 	return false
+}
+
+func getClaimsFromContext(r *http.Request) (jwt.MapClaims, bool) {
+	value := r.Context().Value(types.UserClaims)
+	if value == nil {
+		return nil, false
+	}
+
+	claims, ok := value.(jwt.MapClaims)
+	if !ok {
+		return nil, false
+	}
+
+	return claims, true
 }

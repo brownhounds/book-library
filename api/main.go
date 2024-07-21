@@ -27,6 +27,8 @@ func main() {
 
 	routes.AuthRouter(app)
 	routes.BooksRouter(app)
+	routes.BookRequestRouter(app)
+	routes.ReadersRouter(app)
 
 	app.Serve(env.Env(config.SERVER_HOST), env.Env(config.SERVER_PORT))
 }

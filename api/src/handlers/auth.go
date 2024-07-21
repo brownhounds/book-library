@@ -50,6 +50,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type Whoami struct {
+	Id     string         `db:"id"`
 	Name   string         `db:"name"`
 	Email  string         `db:"email"`
 	Avatar string         `db:"avatar"`
@@ -63,7 +64,7 @@ func WhoamiHandler(w http.ResponseWriter, r *http.Request) {
 	conn := clients.Postgres.Connection()
 	var whoami Whoami
 
-	err := conn.Get(&whoami, "SELECT name, email, avatar, roles FROM get_user_by_id($1)", userId)
+	err := conn.Get(&whoami, "SELECT id, name, email, avatar, roles FROM get_user_by_id($1)", userId)
 	if err != nil {
 		panic(err)
 	}
